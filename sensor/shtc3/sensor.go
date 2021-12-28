@@ -74,6 +74,7 @@ func readValue(rw io.ReadWriter, cmd Cmd) (int16, error) {
 
 	val := int16(buf[0])<<8 | int16(buf[1])
 	if err := crc8.Checksum(crc8.Default, buf[:1], buf[2]); err != nil {
+		fmt.Println(buf)
 		return val, err
 	}
 
