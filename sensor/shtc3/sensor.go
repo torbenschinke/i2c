@@ -11,10 +11,14 @@ const I2CAddr = 0x70
 
 type Ident uint16
 
+// SHTC3 returns true, if Ident refers to the according sensor identifier.
+// xxxx' 1 xxx’xx 00’0111
 func (i Ident) SHTC3() bool {
-	fmt.Println(byte(i))
-	fmt.Println(byte(i >> 8))
-	return true
+	const (
+		mask  = 0b0000100000111111
+		ident = 0b0000100000000111
+	)
+	return i&mask == ident
 }
 
 // Cmd defines a 2 byte SHTC3 control opcode.
@@ -74,7 +78,7 @@ func readValue(rw io.ReadWriter, cmd Cmd) (int16, error) {
 
 	val := int16(buf[0])<<8 | int16(buf[1])
 	if err := crc8.Checksum(crc8.Default, buf[:2], buf[2]); err != nil {
-		fmt.Println(buf)
+		fmt.Printf("invalid checksum %v\n", buf)
 		return val, err
 	}
 

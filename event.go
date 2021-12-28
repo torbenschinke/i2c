@@ -111,14 +111,14 @@ func (d *Dispatcher) Time() time.Time {
 type PrintObserver struct {
 }
 
-func (p *PrintObserver) OnTemperature(id ID, t T) {
+func (p PrintObserver) OnTemperature(id ID, t T) {
 	fmt.Printf("%v -> %v\n", id, t.String())
 }
 
-func (p *PrintObserver) OnError(id ID, err error) {
+func (p PrintObserver) OnError(id ID, err error) {
 	fmt.Printf("%v -> %v\n", id, err)
 }
 
-func (p *PrintObserver) OnHumidity(id ID, h RH) {
+func (p PrintObserver) OnHumidity(id ID, h RH) {
 	fmt.Printf("%v -> %v\n", id, h.String())
 }
