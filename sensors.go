@@ -68,6 +68,10 @@ func (p *Polling) poll() {
 	}
 }
 
+func (p *Polling) Dispatcher() *Dispatcher {
+	return p.dispatcher
+}
+
 func (p *Polling) Close() error {
 	p.ticker.Stop()
 	p.done <- true
