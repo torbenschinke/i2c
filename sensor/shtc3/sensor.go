@@ -24,13 +24,13 @@ func (i Ident) SHTC3() bool {
 // Cmd defines a 2 byte SHTC3 control opcode.
 type Cmd uint16
 
-type Temperature int16
+type Temperature uint16
 
 func (t Temperature) Celsius() float64 {
 	return 175*float64(t)/65536.0 - 45.0
 }
 
-type Humidity int16
+type Humidity uint16
 
 func (h Humidity) Relative() float64 {
 	return 100 * float64(h) / 65536.0
