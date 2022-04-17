@@ -45,9 +45,25 @@ func NewPolling(interval time.Duration) *Polling {
 		fmt.Printf("found i2c bus %d\n", ref.Number)
 
 		polling.busses = append(polling.busses, bus)
-		if shtc3Sensor, err := newShtc3x(bus); err == nil {
-			fmt.Printf("found shtc3 sensor on i2c %v.%v\n", ref.Number, shtc3Sensor.ID())
-			polling.sensors = append(polling.sensors, shtc3Sensor)
+		shtc3Sensors, err := findShtc3(bus)
+		if err != nil {
+			fmt.Printf("failed to find shtc3 sensors: %v/n", err)
+		}
+
+		for _, sensor := range shtc3Sensors {
+			fmt.Printf("found shtc3 sensor on i2c %v.%v\n", ref.Number, sensor.ID())
+			polling.sensors = append(polling.sensors, sensor)
+		}
+		//
+
+		sht3Sensors, err := findSht3(bus)
+		if err != nil {
+			fmt.Printf("failed to find sht3x sensors: %v/n", err)
+		}
+
+		for _, sensor := range sht3Sensors {
+			fmt.Printf("found sht3x sensor on i2c %v\n", ref.Number)
+			polling.sensors = append(polling.sensors, sensor)
 		}
 	}
 

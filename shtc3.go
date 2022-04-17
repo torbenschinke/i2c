@@ -3,6 +3,7 @@ package i2c
 import (
 	"fmt"
 	"github.com/torbenschinke/i2c/sensor/shtc3"
+	"log"
 	"periph.io/x/conn/v3/i2c"
 	"time"
 )
@@ -15,10 +16,24 @@ type shtc3x struct {
 	lastPoll time.Time
 }
 
-func newShtc3x(bus i2c.BusCloser) (*shtc3x, error) {
+func findShtc3(bus i2c.BusCloser) ([]*shtc3x, error) {
+	var sensors []*shtc3x
+	for _, addr := range shtc3.I2CAddrs {
+		s, err := newShtc3x(bus, addr)
+		if err != nil {
+			log.Printf("probing shtc3x on %#x failed (%v)\n", addr, err)
+		} else {
+			sensors = append(sensors, s)
+		}
+	}
+
+	return sensors, nil
+}
+
+func newShtc3x(bus i2c.BusCloser, addr uint16) (*shtc3x, error) {
 	s := &shtc3x{
 		dev: dev{
-			addr: shtc3.I2CAddr,
+			addr: addr,
 			bus:  bus,
 		},
 	}

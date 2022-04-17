@@ -45,6 +45,12 @@ type ErrorObserver interface {
 	OnError(id ID, err error)
 }
 
+type Observer interface {
+	TemperatureObserver
+	HumidityObserver
+	ErrorObserver
+}
+
 type Dispatcher struct {
 	mutex        sync.RWMutex
 	listener     map[int]interface{}

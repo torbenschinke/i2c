@@ -7,7 +7,9 @@ import (
 	"time"
 )
 
-const I2CAddr = 0x70
+var I2CAddrs = []uint16{
+	0x70, // SHTC3
+}
 
 type Ident uint16
 
